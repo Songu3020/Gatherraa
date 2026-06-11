@@ -10,28 +10,25 @@
     "contract",
     "tests/integration"
   ],
+  "packageManager": "npm@10",
+  "engines": {
+    "node": ">=20.0.0"
+  },
   "scripts": {
     "install": "npm install --workspaces",
+    "clean": "rimraf node_modules app/backend/node_modules app/frontend/node_modules app/image-service/node_modules tests/integration/node_modules contract/target",
     "build": "npm run build --workspaces",
+    "build:backend": "npm --workspace app/backend run build",
+    "build:frontend": "npm --workspace app/frontend run build",
+    "build:contracts": "cd contract && cargo build --workspace --all-features",
     "format": "npm run format --workspaces",
     "lint": "npm run lint --workspaces",
     "test": "npm run test --workspaces",
     "test:backend": "npm --workspace app/backend test",
     "test:frontend": "npm --workspace app/frontend lint",
     "test:contract": "cd contract && cargo test --workspace --all-features",
-    "storybook": "npm --workspace app/frontend run storybook"
-  },
-  "dependencies": {
-    "@hookform/resolvers": "^5.2.2",
-    "@nestjs/cli": "^11.0.16",
-    "@nestjs/mapped-types": "*",
-    "ioredis": "^5.9.3",
-    "react-hook-form": "^7.71.2",
-    "zod": "^4.3.6"
-  },
-  "devDependencies": {
-    "@types/react": "^19.2.14",
-    "@lhci/cli": "^0.15.1",
-    "@types/ioredis": "^4.28.10"
+    "storybook": "npm --workspace app/frontend run storybook",
+    "validate": "npm run lint && npm run test",
+    "workspace:status": "npm workspaces list --json"
   }
 }

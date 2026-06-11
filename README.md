@@ -99,6 +99,16 @@ cd ../app/backend && npm install
 cd ../frontend && npm install
 ```
 
+### Workspace commands
+
+- `npm run install` - install all workspace dependencies
+- `npm run build` - build all workspace packages
+- `npm run lint` - lint all workspace packages
+- `npm run test` - run tests across all workspace packages
+- `npm run workspace:status` - list workspace packages
+
+> If you see `ENOTFOUND` or module resolution issues, run `npm install` from the repository root and avoid invoking `npm install` inside subfolders unless you need a package-specific install.
+
 ### Running the Development Environment
 
 **Smart Contracts:**
