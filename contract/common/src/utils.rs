@@ -1,6 +1,6 @@
 //! General utility functions for Gathera contracts
 
-use soroban_sdk::{Env, Address, Symbol, String, Vec, Map};
+use soroban_sdk::{Env, Address, Symbol, String, Vec, Map, Val, IntoVal, TryFromVal};
 use crate::types::{CommonStatus, SortDirection};
 
 /// Validation utilities
@@ -106,7 +106,7 @@ impl MapUtils {
     }
     
     /// Merge two maps (second map overwrites first)
-    pub fn merge<K: Clone, V: Clone>(map1: &Map<K, V>, map2: &Map<K, V>) -> Map<K, V> {
+    pub fn merge<K: IntoVal<Env, Val> + TryFromVal<Env, Val> + Clone, V: IntoVal<Env, Val> + TryFromVal<Env, Val> + Clone>(map1: &Map<K, V>, map2: &Map<K, V>) -> Map<K, V> {
         let mut result = Map::new(&map1.env());
         
         // Copy first map
