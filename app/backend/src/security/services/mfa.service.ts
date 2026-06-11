@@ -445,10 +445,9 @@ export class MfaService {
   }
 
   private async sendSmsCode(mfaSetting: MfaSetting, user: User): Promise<string> {
-    const code = this.generateTimeBasedCode(mfaSetting.secret);
-    
     // In production, integrate with SMS service like Twilio
-    this.logger.info('SMS MFA code sent', { userId: user.id });
+    // SECURITY: Never log the generated verification code
+    this.logger.info('SMS MFA challenge generated', { userId: user.id });
     
     return mfaSetting.phoneNumber;
   }
