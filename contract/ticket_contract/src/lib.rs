@@ -17,7 +17,7 @@
 //! - `storage`: Data storage structures
 //! - `validation`: Input validation logic
 
-use soroban_sdk::{contract, contracterror, contractimpl, Address, Symbol, Env, String};
+use soroban_sdk::{contract, contracterror, contractimpl, Address, Env, String, Symbol};
 
 /// Errors that can occur during ticket operations
 #[contracterror]
@@ -92,11 +92,7 @@ impl SoulboundTicketContract {
     /// # Returns
     ///
     /// True if the claimed_owner owns the ticket
-    pub fn verify_ownership(
-        env: Env,
-        ticket_id: Symbol,
-        claimed_owner: Address,
-    ) -> bool {
+    pub fn verify_ownership(env: Env, ticket_id: Symbol, claimed_owner: Address) -> bool {
         let _ = (env, ticket_id, claimed_owner);
         false
     }
