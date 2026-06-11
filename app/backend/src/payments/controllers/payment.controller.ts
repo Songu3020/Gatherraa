@@ -9,20 +9,18 @@ import {
   Query,
   UseGuards,
   Req,
-  Res,
   HttpCode,
   HttpStatus,
   BadRequestException,
-  NotFoundException,
 } from '@nestjs/common';
-import type { Request, Response } from 'express';
+import type { Request } from 'express';
 import { JwtAuthGuard } from '../../auth/guards/jwt-auth.guard';
-import { Request as ExpressRequest } from 'express';
 import { PaymentService } from '../services/payment.service';
 import { StripeService } from '../services/stripe.service';
 import { CryptoPaymentService } from '../services/crypto-payment.service';
 import { ReconciliationService } from '../services/reconciliation.service';
 import { RateLimit } from '../../rate-limit/rate-limit.decorator';
+import type { User } from '../../users/entities/user.entity';
 import {
   CreatePaymentDto,
   InitiateStripePaymentDto,
@@ -34,6 +32,10 @@ import {
   UpdatePaymentMethodDto,
   PaymentListDto,
 } from '../dto/payment.dto';
+
+interface AuthenticatedRequest extends Request {
+  user: User;
+}
 
 @Controller('payments')
 @UseGuards(JwtAuthGuard)
@@ -50,7 +52,7 @@ export class PaymentController {
    */
   @Post()
   @RateLimit('EXPENSIVE')
-  async createPayment(@Body() dto: CreatePaymentDto, @Req() request: Request): Promise<any> {
+  async createPayment(@Body() dto: CreatePaymentDto, @Req() request: Request): Promise<Record<string, unknown>> {
     const ipAddress = this.getClientIpAddress(request);
     const payment = await this.paymentService.createPayment(dto, ipAddress);
 
@@ -81,7 +83,7 @@ export class PaymentController {
    */
   @Post('stripe/confirm')
   @RateLimit('EXPENSIVE')
-  async confirmStripePayment(@Body() dto: ConfirmStripePaymentDto): Promise<any> {
+  async confirmStripePayment(@Body() dto: ConfirmStripePaymentDto): Promise<Record<string, unknown>> {
     const payment = await this.stripeService.confirmPayment(dto);
 
     return {
@@ -97,7 +99,7 @@ export class PaymentController {
    */
   @Post('crypto/initiate')
   @RateLimit('EXPENSIVE')
-  async initiateCryptoPayment(@Body() dto: InitiateCryptoPaymentDto): Promise<any> {
+  async initiateCryptoPayment(@Body() dto: InitiateCryptoPaymentDto): Promise<Record<string, unknown>> {
     // Validate wallet address
     if (!this.cryptoPaymentService.isValidAddress(dto.fromAddress, dto.method)) {
       throw new BadRequestException('Invalid wallet address');
@@ -125,7 +127,7 @@ export class PaymentController {
    */
   @Post('crypto/verify')
   @RateLimit('API')
-  async verifyCryptoPayment(@Body() dto: VerifyCryptoPaymentDto): Promise<any> {
+  async verifyCryptoPayment(@Body() dto: VerifyCryptoPaymentDto): Promise<Record<string, unknown>> {
     const payment = await this.cryptoPaymentService.verifyTransaction(dto);
 
     return {
@@ -141,7 +143,7 @@ export class PaymentController {
    * Get payment by ID
    */
   @Get(':id')
-  async getPayment(@Param('id') id: string): Promise<any> {
+  async getPayment(@Param('id') id: string): Promise<Record<string, unknown>> {
     const payment = await this.paymentService.getPaymentById(id);
 
     return {
@@ -168,7 +170,7 @@ export class PaymentController {
     @Param('userId') userId: string,
     @Query('limit') limit: number = 20,
     @Query('offset') offset: number = 0,
-  ): Promise<any> {
+  ): Promise<Record<string, unknown>> {
     const [payments, total] = await this.paymentService.getUserPayments(userId, limit, offset);
 
     return {
@@ -194,7 +196,7 @@ export class PaymentController {
   async refundPayment(
     @Param('id') paymentId: string,
     @Body() dto: CreateRefundDto,
-  ): Promise<any> {
+  ): Promise<Record<string, unknown>> {
     const refund = await this.paymentService.refundPayment({
       ...dto,
       paymentId,
@@ -214,7 +216,7 @@ export class PaymentController {
    * Get payment refunds
    */
   @Get(':id/refunds')
-  async getPaymentRefunds(@Param('id') paymentId: string): Promise<any> {
+  async getPaymentRefunds(@Param('id') paymentId: string): Promise<Record<string, unknown>> {
     const refunds = await this.paymentService.getPaymentRefunds(paymentId);
 
     return {
@@ -235,8 +237,8 @@ export class PaymentController {
   @Post('methods/save')
   async savePaymentMethod(
     @Body() dto: SavePaymentMethodDto,
-    @Req() request: any,
-  ): Promise<any> {
+    @Req() request: AuthenticatedRequest,
+  ): Promise<Record<string, unknown>> {
     const userId = request.user.id;
 
     const method = await this.paymentService.savePaymentMethod(
@@ -259,7 +261,7 @@ export class PaymentController {
    * Get saved payment methods
    */
   @Get('methods')
-  async getSavedPaymentMethods(@Req() request: any): Promise<any> {
+  async getSavedPaymentMethods(@Req() request: AuthenticatedRequest): Promise<Record<string, unknown>> {
     const userId = request.user.id;
     const methods = await this.paymentService.getSavedPaymentMethods(userId);
 
@@ -283,8 +285,8 @@ export class PaymentController {
   async updatePaymentMethod(
     @Param('id') id: string,
     @Body() dto: UpdatePaymentMethodDto,
-    @Req() request: any,
-  ): Promise<any> {
+    @Req() request: AuthenticatedRequest,
+  ): Promise<Record<string, unknown>> {
     const userId = request.user.id;
 
     if (dto.isDefault) {
@@ -304,8 +306,8 @@ export class PaymentController {
   @Delete('methods/:id')
   async deletePaymentMethod(
     @Param('id') id: string,
-    @Req() request: any,
-  ): Promise<any> {
+    @Req() request: AuthenticatedRequest,
+  ): Promise<Record<string, unknown>> {
     const userId = request.user.id;
     await this.paymentService.deleteSavedPaymentMethod(userId, id);
 
@@ -319,7 +321,7 @@ export class PaymentController {
   async getAnalytics(
     @Query('dateFrom') dateFrom?: string,
     @Query('dateTo') dateTo?: string,
-  ): Promise<any> {
+  ): Promise<Record<string, unknown>> {
     const from = dateFrom ? new Date(dateFrom) : new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
     const to = dateTo ? new Date(dateTo) : new Date();
 
@@ -330,7 +332,7 @@ export class PaymentController {
    * Get reconciliation reports
    */
   @Get('reconciliation/reports')
-  async getReconciliationReports(@Query('limit') limit: number = 30): Promise<any> {
+  async getReconciliationReports(@Query('limit') limit: number = 30): Promise<Record<string, unknown>> {
     const reports = await this.reconciliationService.getReconciliationReports(limit);
 
     return {
@@ -351,7 +353,7 @@ export class PaymentController {
    * Run reconciliation manually
    */
   @Post('reconciliation/run')
-  async runReconciliation(@Query('provider') provider: string = 'stripe'): Promise<any> {
+  async runReconciliation(@Query('provider') provider: string = 'stripe'): Promise<Record<string, unknown>> {
     const yesterday = new Date();
     yesterday.setDate(yesterday.getDate() - 1);
     yesterday.setHours(0, 0, 0, 0);
@@ -359,7 +361,7 @@ export class PaymentController {
     const tomorrow = new Date(yesterday);
     tomorrow.setDate(tomorrow.getDate() + 1);
 
-    let result;
+    let result: { id: string; provider: string; status: string; discrepancyCount: number; completedAt: Date };
 
     if (provider === 'stripe') {
       result = await this.reconciliationService.reconcileStripe(yesterday, tomorrow);
@@ -382,7 +384,7 @@ export class PaymentController {
    * Retry a failed payment
    */
   @Post(':id/retry')
-  async retryPayment(@Param('id') id: string): Promise<any> {
+  async retryPayment(@Param('id') id: string): Promise<Record<string, unknown>> {
     const payment = await this.paymentService.retryPayment(id);
 
     return {

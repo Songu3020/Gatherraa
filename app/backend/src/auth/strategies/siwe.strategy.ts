@@ -2,6 +2,7 @@ import { Strategy } from 'passport-custom';
 import { PassportStrategy } from '@nestjs/passport';
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { SiweMessage } from 'siwe';
+import type { Request } from 'express';
 
 export interface SiweValidateResult {
   address: string;
@@ -14,7 +15,7 @@ export class SiweStrategy extends PassportStrategy(Strategy, 'siwe') {
     super();
   }
 
-  async validate(req: any): Promise<SiweValidateResult> {
+  async validate(req: Request): Promise<SiweValidateResult> {
     const { message, signature } = req.body;
     
     if (!message || !signature) {

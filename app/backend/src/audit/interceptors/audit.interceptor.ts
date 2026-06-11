@@ -21,7 +21,7 @@ export class AuditInterceptor implements NestInterceptor {
     private readonly auditService: AuditService,
   ) { }
 
-  intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
+  intercept(context: ExecutionContext, next: CallHandler): Observable<unknown> {
     const auditData = this.reflector.get<{ action?: string; entityName?: string }>(
       AUDIT_METADATA_KEY,
       context.getHandler(),
@@ -99,7 +99,7 @@ export class AuditInterceptor implements NestInterceptor {
       case 'GET':
         return AuditAction.ACCESS;
       default:
-        return AuditAction.ACCESS as any as AuditAction;
+        return AuditAction.ACCESS;
     }
   }
 
@@ -108,9 +108,10 @@ export class AuditInterceptor implements NestInterceptor {
     return parts[1] || 'Unknown';
   }
 
-  private sanitizeData(data: any): any {
+  private sanitizeData(data: unknown): Record<string, unknown> | null {
     if (!data) return null;
-    const sanitized = { ...data };
+    if (typeof data !== 'object') return null;
+    const sanitized = { ...data as Record<string, unknown> };
     
     // List of sensitive keys to redact from logs
     const sensitiveKeys = ['password', 'token', 'secret', 'key', 'private', 'nonce'];
