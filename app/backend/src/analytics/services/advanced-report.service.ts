@@ -113,7 +113,7 @@ export class AdvancedReportService {
       userId: report.userId,
       ...report.filters,
       limit: 10000
-    } as any);
+    });
 
     // Advanced KPIs
     const dashboardKPIs = await this.advancedAnalyticsService.getDashboardKPIs(timePeriod);
@@ -122,13 +122,13 @@ export class AdvancedReportService {
     const userBehavior = await this.advancedAnalyticsService.getUserBehaviorAnalytics({
       timePeriod,
       limit: 5000
-    } as any);
+    });
 
     // Market trends
     const marketTrends = await this.advancedAnalyticsService.getMarketTrendAnalysis({
       timePeriod,
       includePredictions: true
-    } as any);
+    });
 
     // Real-time metrics
     const realTimeMetrics = await this.advancedAnalyticsService.getRealTimeMetrics();

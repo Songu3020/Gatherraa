@@ -22,6 +22,7 @@ const eslintConfig = defineConfig([
       // No console.* in production code — use the structured logger instead.
       // Exceptions are handled via eslint-disable-next-line in logger.ts and story files.
       "no-console": "error",
+      "@typescript-eslint/no-explicit-any": "error",
     },
   },
   // Allow console.* in Storybook stories, test files, and scripts

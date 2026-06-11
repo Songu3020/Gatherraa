@@ -734,7 +734,7 @@ export class ComplianceMonitoringService {
       auditId: `COMP-${Date.now()}`,
       title: `Compliance Alert: ${alert.requirement}`,
       description: alert.message,
-      framework: alert.framework as any,
+      framework: alert.framework,
       status: 'in_progress',
       scheduledDate: new Date(),
       scope: {
@@ -851,7 +851,7 @@ export class ComplianceMonitoringService {
 
     const audits = await this.auditRepository.find({
       where: {
-        framework: framework as any,
+        framework: framework,
         completedDate: Between(startDate, endDate),
       },
       order: { completedDate: 'DESC' },

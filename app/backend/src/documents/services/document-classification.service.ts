@@ -331,7 +331,7 @@ export class DocumentClassificationService {
     category: DocumentCategory;
     confidence: number;
   }> {
-    const scores: Record<DocumentCategory, number> = {} as any;
+    const scores = {} as Record<DocumentCategory, number>;
     
     // Calculate scores for each category
     for (const [category, config] of Object.entries(this.categoryKeywords)) {
@@ -554,7 +554,7 @@ export class DocumentClassificationService {
       select: ['category', 'tags'],
     });
 
-    const categoryDistribution: Record<DocumentCategory, number> = {} as any;
+    const categoryDistribution = {} as Record<DocumentCategory, number>;
     const tagDistribution: Record<string, number> = {};
     let totalConfidence = 0;
     let processedCount = 0;

@@ -58,7 +58,7 @@ const FormInput = forwardRef<
   const sharedProps = {
     id: name,
     name,
-    ref: ref as any,
+    ref: ref,
     className: baseClass,
     onFocus: () => setFocused(true),
     onBlur: (e: any) => { setFocused(false); props.onBlur?.(e); },

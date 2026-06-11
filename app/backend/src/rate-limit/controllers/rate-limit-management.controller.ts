@@ -110,8 +110,8 @@ export class RateLimitManagementController {
     const quota = await this.quotaService.setQuota(
       quotaData.userId,
       quotaData.endpoint,
-      quotaData.tier as any,
-      quotaData.period as any,
+      quotaData.tier,
+      quotaData.period,
       quotaData.limit,
       quotaData.overageRate
     );

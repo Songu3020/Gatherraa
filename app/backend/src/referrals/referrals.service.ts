@@ -96,7 +96,7 @@ export class ReferralsService {
       const cutoff = new Date(Date.now() - 24 * 60 * 60 * 1000);
       const ipCount = await this.referralsRepo
         .count({
-          where: { ipAddress: opts.ip, createdAt: MoreThan(cutoff) as any },
+          where: { ipAddress: opts.ip, createdAt: MoreThan(cutoff) },
         })
         .catch(() => 0);
       if (ipCount >= this.IP_RATE_LIMIT) {

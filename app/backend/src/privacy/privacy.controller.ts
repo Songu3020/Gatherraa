@@ -76,7 +76,7 @@ export class PrivacyController {
     @Param('userId') userId: string,
     @Param('category') category: string,
   ) {
-    return this.consentManagementService.hasConsent(userId, category as any);
+    return this.consentManagementService.hasConsent(userId, category);
   }
 
   @Post('data-subject-request')
@@ -214,7 +214,7 @@ export class PrivacyController {
     @Body('reviewedBy') reviewedBy?: string,
     @Body('approvedBy') approvedBy?: string,
   ) {
-    return this.privacyImpactAssessmentService.updateDPIAStatus(id, status as any, reviewedBy, approvedBy);
+    return this.privacyImpactAssessmentService.updateDPIAStatus(id, status, reviewedBy, approvedBy);
   }
 
   @Get('dpia')

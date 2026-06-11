@@ -374,7 +374,7 @@ export class DocumentService {
         .getRawMany(),
     ]);
 
-    const statusCounts: Record<ProcessingStatus, number> = {} as any;
+    const statusCounts = {} as Record<ProcessingStatus, number>;
     let totalProcessingTime = 0;
     let processingCount = 0;
 

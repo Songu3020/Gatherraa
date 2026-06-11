@@ -184,7 +184,7 @@ export class LmsIntegrationService {
           // Send webhook for user sync
           await this.webhookService.createWebhookEvent(
             connection.id,
-            'USER_CREATED' as any,
+            'USER_CREATED',
             transformedUser,
             connection.configuration?.webhookEndpoint || '',
             connection.provider
@@ -264,7 +264,7 @@ export class LmsIntegrationService {
           // Send webhook for course sync
           await this.webhookService.createWebhookEvent(
             connection.id,
-            'COURSE_ENROLLED' as any,
+            'COURSE_ENROLLED',
             transformedCourse,
             connection.configuration?.webhookEndpoint || '',
             connection.provider
@@ -344,7 +344,7 @@ export class LmsIntegrationService {
           // Send webhook for enrollment sync
           await this.webhookService.createWebhookEvent(
             connection.id,
-            'COURSE_ENROLLED' as any,
+            'COURSE_ENROLLED',
             transformedEnrollment,
             connection.configuration?.webhookEndpoint || '',
             connection.provider
@@ -447,7 +447,7 @@ export class LmsIntegrationService {
   private async testCanvasConnection(connection: LmsConnection): Promise<{ success: boolean; message: string; details?: any }> {
     try {
       const response = await this.apiGatewayService.makeApiCall(
-        { id: connection.id, configuration: { baseUrl: connection.baseUrl }, credentials: { apiKey: connection.apiKey } } as any,
+        { id: connection.id, configuration: { baseUrl: connection.baseUrl }, credentials: { apiKey: connection.apiKey } },
         'users/self',
         'GET'
       );
@@ -474,7 +474,7 @@ export class LmsIntegrationService {
 
   private async getCanvasUsers(connection: LmsConnection): Promise<LmsUser[]> {
     const response = await this.apiGatewayService.makeApiCall(
-      { id: connection.id, configuration: { baseUrl: connection.baseUrl }, credentials: { apiKey: connection.apiKey } } as any,
+      { id: connection.id, configuration: { baseUrl: connection.baseUrl }, credentials: { apiKey: connection.apiKey } },
       'users',
       'GET'
     );
@@ -488,7 +488,7 @@ export class LmsIntegrationService {
 
   private async getCanvasCourses(connection: LmsConnection): Promise<LmsCourse[]> {
     const response = await this.apiGatewayService.makeApiCall(
-      { id: connection.id, configuration: { baseUrl: connection.baseUrl }, credentials: { apiKey: connection.apiKey } } as any,
+      { id: connection.id, configuration: { baseUrl: connection.baseUrl }, credentials: { apiKey: connection.apiKey } },
       'courses',
       'GET'
     );
@@ -502,7 +502,7 @@ export class LmsIntegrationService {
 
   private async getCanvasEnrollments(connection: LmsConnection): Promise<LmsEnrollment[]> {
     const response = await this.apiGatewayService.makeApiCall(
-      { id: connection.id, configuration: { baseUrl: connection.baseUrl }, credentials: { apiKey: connection.apiKey } } as any,
+      { id: connection.id, configuration: { baseUrl: connection.baseUrl }, credentials: { apiKey: connection.apiKey } },
       'enrollments',
       'GET'
     );
@@ -518,7 +518,7 @@ export class LmsIntegrationService {
   private async testMoodleConnection(connection: LmsConnection): Promise<{ success: boolean; message: string; details?: any }> {
     try {
       const response = await this.apiGatewayService.makeApiCall(
-        { id: connection.id, configuration: { baseUrl: connection.baseUrl }, credentials: { token: connection.accessToken } } as any,
+        { id: connection.id, configuration: { baseUrl: connection.baseUrl }, credentials: { token: connection.accessToken } },
         'webservice/rest/server.php?wstoken=' + connection.accessToken + '&wsfunction=core_webservice_get_site_info&moodlewsrestformat=json',
         'GET'
       );
@@ -545,7 +545,7 @@ export class LmsIntegrationService {
 
   private async getMoodleUsers(connection: LmsConnection): Promise<LmsUser[]> {
     const response = await this.apiGatewayService.makeApiCall(
-      { id: connection.id, configuration: { baseUrl: connection.baseUrl }, credentials: { token: connection.accessToken } } as any,
+      { id: connection.id, configuration: { baseUrl: connection.baseUrl }, credentials: { token: connection.accessToken } },
       `webservice/rest/server.php?wstoken=${connection.accessToken}&wsfunction=core_user_get_users&moodlewsrestformat=json&criteria[0][key]=email&criteria[0][value]=%`,
       'GET'
     );
@@ -559,7 +559,7 @@ export class LmsIntegrationService {
 
   private async getMoodleCourses(connection: LmsConnection): Promise<LmsCourse[]> {
     const response = await this.apiGatewayService.makeApiCall(
-      { id: connection.id, configuration: { baseUrl: connection.baseUrl }, credentials: { token: connection.accessToken } } as any,
+      { id: connection.id, configuration: { baseUrl: connection.baseUrl }, credentials: { token: connection.accessToken } },
       `webservice/rest/server.php?wstoken=${connection.accessToken}&wsfunction=core_course_get_courses&moodlewsrestformat=json`,
       'GET'
     );
@@ -581,7 +581,7 @@ export class LmsIntegrationService {
   private async testBlackboardConnection(connection: LmsConnection): Promise<{ success: boolean; message: string; details?: any }> {
     try {
       const response = await this.apiGatewayService.makeApiCall(
-        { id: connection.id, configuration: { baseUrl: connection.baseUrl }, credentials: { accessToken: connection.accessToken } } as any,
+        { id: connection.id, configuration: { baseUrl: connection.baseUrl }, credentials: { accessToken: connection.accessToken } },
         'users/me',
         'GET'
       );
@@ -608,7 +608,7 @@ export class LmsIntegrationService {
 
   private async getBlackboardUsers(connection: LmsConnection): Promise<LmsUser[]> {
     const response = await this.apiGatewayService.makeApiCall(
-      { id: connection.id, configuration: { baseUrl: connection.baseUrl }, credentials: { accessToken: connection.accessToken } } as any,
+      { id: connection.id, configuration: { baseUrl: connection.baseUrl }, credentials: { accessToken: connection.accessToken } },
       'users',
       'GET'
     );
@@ -622,7 +622,7 @@ export class LmsIntegrationService {
 
   private async getBlackboardCourses(connection: LmsConnection): Promise<LmsCourse[]> {
     const response = await this.apiGatewayService.makeApiCall(
-      { id: connection.id, configuration: { baseUrl: connection.baseUrl }, credentials: { accessToken: connection.accessToken } } as any,
+      { id: connection.id, configuration: { baseUrl: connection.baseUrl }, credentials: { accessToken: connection.accessToken } },
       'courses',
       'GET'
     );

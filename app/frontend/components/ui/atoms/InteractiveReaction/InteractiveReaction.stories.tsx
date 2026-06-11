@@ -185,7 +185,7 @@ export const InteractiveDemo: Story = {
           {Object.keys(counts).map((type) => (
             <InteractiveReaction
               key={type}
-              reactionType={type as any}
+              reactionType={type as 'like' | 'love' | 'thumbsup' | 'comment' | 'share' | 'bookmark'}
               count={counts[type as keyof typeof counts]}
               isActive={activeStates[type as keyof typeof activeStates]}
               onReact={handleReact}

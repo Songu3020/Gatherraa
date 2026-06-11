@@ -162,7 +162,7 @@ export class MLDetectionEngine {
 
       const evidence: AnomalyEvidence[] = suspiciousFeatures.map((name) => ({
         type: `FEATURE_${name.toUpperCase()}`,
-        value: (features as any)[name],
+        value: (features as Record<string, number>)[name],
         threshold: this.calculateFeatureThreshold(name, features_historical),
         description: `Feature ${name} deviates significantly from historical baseline`,
       }));
@@ -240,16 +240,16 @@ export class MLDetectionEngine {
   ): Record<string, number> {
     const importance: Record<string, number> = {};
     const featureNames = Object.keys(features).filter(
-      (k) => typeof (features as any)[k] === 'number',
+      (k) => typeof (features as Record<string, unknown>)[k] === 'number',
     );
 
     for (const featureName of featureNames) {
-      const baseValue = (features as any)[featureName];
+      const baseValue = (features as Record<string, number>)[featureName];
 
       // Numeric gradient approximation
       const perturbation = Math.max(Math.abs(baseValue) * 0.01, 0.001);
       const perturbedFeatures = { ...features };
-      (perturbedFeatures as any)[featureName] = baseValue + perturbation;
+      (perturbedFeatures as Record<string, number>)[featureName] = baseValue + perturbation;
 
       // Simplified importance: how much feature contributes to anomaly score
       const normalizedPerturbed = this.normalizeFeatures(perturbedFeatures);
@@ -309,12 +309,12 @@ export class MLDetectionEngine {
   ): string[] {
     const suspicious: string[] = [];
     const featureNames = Object.keys(current).filter(
-      (k) => typeof (current as any)[k] === 'number',
+      (k) => typeof (current as Record<string, unknown>)[k] === 'number',
     );
 
     for (const featureName of featureNames) {
-      const currentValue = (current as any)[featureName];
-      const historicalValues = historical.map((f) => (f as any)[featureName]).filter((v) => typeof v === 'number');
+      const currentValue = (current as Record<string, number>)[featureName];
+      const historicalValues = historical.map((f) => (f as Record<string, number>)[featureName]).filter((v) => typeof v === 'number');
 
       if (historicalValues.length >= 5) {
         const mean = this.calculateMean(historicalValues);
@@ -338,7 +338,7 @@ export class MLDetectionEngine {
     historical: FeatureVector[],
   ): number {
     const values = historical
-      .map((f) => (f as any)[featureName])
+      .map((f) => (f as Record<string, number>)[featureName])
       .filter((v) => typeof v === 'number');
 
     if (values.length === 0) return 0;

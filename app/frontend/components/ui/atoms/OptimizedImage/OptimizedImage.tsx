@@ -144,7 +144,7 @@ export const OptimizedImage: React.FC<OptimizedImageProps> = ({
       setIsLoading(false);
       setHasError(false);
       setCurrentSrc(src);
-      onLoad?.(event as any);
+      onLoad?.(event as unknown as React.SyntheticEvent<HTMLImageElement>);
     };
 
     img.onerror = (event) => {
@@ -155,7 +155,7 @@ export const OptimizedImage: React.FC<OptimizedImageProps> = ({
         setCurrentSrc(fallbackSrc);
       }
       
-      onError?.(event as any);
+      onError?.(event as unknown as React.SyntheticEvent<HTMLImageElement>);
     };
 
     img.src = src;

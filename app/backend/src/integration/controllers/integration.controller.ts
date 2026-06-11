@@ -141,7 +141,7 @@ export class IntegrationController {
   async createWebhookEvent(@Body() createWebhookEventDto: CreateWebhookEventDto) {
     return this.webhookService.createWebhookEvent(
       createWebhookEventDto.integrationId,
-      createWebhookEventDto.eventType as any,
+      createWebhookEventDto.eventType,
       createWebhookEventDto.payload,
       createWebhookEventDto.endpointUrl,
       createWebhookEventDto.eventSource,
@@ -386,7 +386,7 @@ export class IntegrationController {
       runSingleTestDto.integrationId,
       {
         name: runSingleTestDto.testName,
-        type: runSingleTestDto.testType as any,
+        type: runSingleTestDto.testType,
         description: `Single test: ${runSingleTestDto.testName}`,
       },
       runSingleTestDto.testParameters,
@@ -421,8 +421,8 @@ export class IntegrationController {
     return this.analyticsService.getMetrics(
       getAnalyticsDto.integrationId,
       {
-        metricType: getAnalyticsDto.metricType as any,
-        period: getAnalyticsDto.period as any,
+        metricType: getAnalyticsDto.metricType,
+        period: getAnalyticsDto.period,
         startDate: getAnalyticsDto.startDate ? new Date(getAnalyticsDto.startDate) : undefined,
         endDate: getAnalyticsDto.endDate ? new Date(getAnalyticsDto.endDate) : undefined,
         dimensions: getAnalyticsDto.dimensions,

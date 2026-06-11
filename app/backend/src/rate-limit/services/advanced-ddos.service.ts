@@ -139,7 +139,7 @@ export class AdvancedDdosService {
       // Create new block
       const block = this.blockedIpRepository.create({
         ipAddress,
-        blockType: reason as any,
+        blockType: reason,
         reason: metadata?.reason || reason,
         metadata,
         violationCount: 1,

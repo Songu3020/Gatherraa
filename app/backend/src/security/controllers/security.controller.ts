@@ -63,7 +63,7 @@ export class SecurityController {
   @Post('permissions/check')
   @ApiOperation({ summary: 'Check user permission' })
   async checkPermission(@Body() body: { userId: string; action: string; resource: string }) {
-    return this.rbacService.checkPermission(body.userId, body.action as any, body.resource as any);
+    return this.rbacService.checkPermission(body.userId, body.action, body.resource);
   }
 
   // KYC/AML Endpoints
@@ -82,13 +82,13 @@ export class SecurityController {
   @Post('kyc/review')
   @ApiOperation({ summary: 'Review KYC verification' })
   async reviewKyc(@Body() body: { verificationId: string; decision: string; notes?: string }) {
-    return this.kycAmlService.reviewKycVerification(body.verificationId, 'reviewer', body.decision as any, body.notes);
+    return this.kycAmlService.reviewKycVerification(body.verificationId, 'reviewer', body.decision, body.notes);
   }
 
   @Get('aml/alerts')
   @ApiOperation({ summary: 'Get AML alerts' })
   async getAmlAlerts(@Query('riskLevel') riskLevel?: string) {
-    return this.kycAmlService.getAmlAlerts(riskLevel as any);
+    return this.kycAmlService.getAmlAlerts(riskLevel);
   }
 
   // Security Audit Endpoints
@@ -108,7 +108,7 @@ export class SecurityController {
   @Get('intrusion/anomalies')
   @ApiOperation({ summary: 'Get security anomalies' })
   async getAnomalies(@Query('threatLevel') threatLevel?: string) {
-    return this.intrusionService.getActiveAnomalies(threatLevel as any);
+    return this.intrusionService.getActiveAnomalies(threatLevel);
   }
 
   @Post('intrusion/investigate')
@@ -120,7 +120,7 @@ export class SecurityController {
   @Post('intrusion/resolve')
   @ApiOperation({ summary: 'Resolve security anomaly' })
   async resolveAnomaly(@Body() body: { anomalyId: string; resolution: string; notes?: string }) {
-    return this.intrusionService.resolveAnomaly(body.anomalyId, 'resolver', body.resolution as any, body.notes);
+    return this.intrusionService.resolveAnomaly(body.anomalyId, 'resolver', body.resolution, body.notes);
   }
 
   // Compliance Endpoints
@@ -145,6 +145,6 @@ export class SecurityController {
   @Post('compliance/export/:id')
   @ApiOperation({ summary: 'Export compliance report' })
   async exportReport(@Param('id') id: string, @Query('format') format: string = 'pdf') {
-    return this.complianceService.exportReport(id, format as any);
+    return this.complianceService.exportReport(id, format as 'pdf' | 'excel' | 'csv');
   }
 }

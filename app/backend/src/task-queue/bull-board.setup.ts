@@ -20,7 +20,7 @@ export function setupBullBoard(
   createBullBoard({
     queues: queues.map((queue) => ({
       name: queue.name,
-      client: queue as any,
+      client: queue,
     })),
     serverAdapter,
   });

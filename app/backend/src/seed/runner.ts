@@ -19,7 +19,7 @@ async function run() {
   console.log('Seeding sample EmailTemplates...');
   for (let i = 0; i < 5; i++) {
     const t = repo.create({
-      id: undefined as any,
+      id: undefined as unknown as string,
       name: `seeded-template-${Date.now()}-${i}`,
       language: 'en',
       subject: faker.lorem.sentence(),

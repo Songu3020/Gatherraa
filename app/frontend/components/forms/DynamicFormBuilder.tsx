@@ -586,7 +586,7 @@ export function DynamicFormBuilder({
     if (showValidationErrors && Object.keys(errors).length > 0) {
       const errorMessages: Record<string, string> = {};
       Object.entries(errors).forEach(([key, error]) => {
-        errorMessages[key] = (error as any)?.message || "Invalid value";
+        errorMessages[key] = (error as Error)?.message || "Invalid value";
       });
       onValidationError?.(errorMessages);
     }
@@ -679,7 +679,7 @@ export function DynamicFormBuilder({
           <h4 className="font-medium text-[var(--color-error)] mb-2">Please fix the following errors:</h4>
           <ul className="space-y-1 text-sm text-[var(--color-error)]">
             {Object.entries(errors).map(([key, error]) => (
-              <li key={key}>• {(error as any)?.message}</li>
+              <li key={key}>• {(error as Error)?.message}</li>
             ))}
           </ul>
         </div>

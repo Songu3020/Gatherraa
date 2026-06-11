@@ -68,7 +68,7 @@ export class AdvancedRateLimitMiddleware implements NestMiddleware {
         userId,
         apiKeyId,
         req.path,
-        tier as any
+        tier
       );
 
       if (!quotaResult.allowed) {

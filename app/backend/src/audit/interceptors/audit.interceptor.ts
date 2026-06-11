@@ -99,7 +99,7 @@ export class AuditInterceptor implements NestInterceptor {
       case 'GET':
         return AuditAction.ACCESS;
       default:
-        return AuditAction.ACCESS as any as AuditAction;
+        return AuditAction.ACCESS;
     }
   }
 

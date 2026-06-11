@@ -205,7 +205,7 @@ export class FraudDetectionService {
    */
   private async checkNewPaymentMethod(userId: string, method: string): Promise<{ score: number }> {
     const hasPaymentWithMethod = await this.paymentRepository.findOne({
-      where: { userId, method: method as any },
+      where: { userId, method },
     });
 
     return { score: hasPaymentWithMethod ? 0 : 15 };

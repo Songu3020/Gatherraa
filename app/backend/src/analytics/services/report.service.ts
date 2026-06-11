@@ -80,7 +80,7 @@ export class ReportService {
         eventId: report.eventId,
         ...report.filters,
         limit: 10000 // reasonable limit for reports
-      } as any);
+      });
 
       // Generate report file based on format
       const filePath = await this.generateReportFile(report, analyticsData.data);

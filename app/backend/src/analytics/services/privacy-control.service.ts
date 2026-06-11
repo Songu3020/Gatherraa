@@ -63,7 +63,7 @@ export class PrivacyControlService {
     const opts = { ...options };
     
     return data.map(item => {
-      let processedItem = { ...item as any };
+      let processedItem = { ...item };
 
       // Remove or anonymize personal data
       if ('userId' in processedItem) {
@@ -95,7 +95,7 @@ export class PrivacyControlService {
     const opts = { ...options };
     
     return data.map(item => {
-      let processedItem = { ...item as any };
+      let processedItem = { ...item };
 
       // For user data, only show their own data or anonymize others
       if ('userId' in processedItem && processedItem.userId !== userId) {
@@ -122,7 +122,7 @@ export class PrivacyControlService {
     const opts = { ...options };
     
     return data.map(item => {
-      let processedItem = { ...item as any };
+      let processedItem = { ...item };
 
       // Organizers can see event-related data but may have restrictions on personal data
       if (opts.anonymizeUserData) {
@@ -152,7 +152,7 @@ export class PrivacyControlService {
     }
 
     return data.map(item => {
-      let processedItem = { ...item as any };
+      let processedItem = { ...item };
 
       if (opts.maskSensitiveFields) {
         processedItem = this.maskSensitiveFields(processedItem);

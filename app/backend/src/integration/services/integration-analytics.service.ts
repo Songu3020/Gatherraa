@@ -1,6 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, Between } from 'typeorm';
+import { Repository, Between, LessThan } from 'typeorm';
 import { IntegrationMetrics, MetricType, MetricPeriod } from '../entities/integration-metrics.entity';
 import { Integration } from '../entities/integration.entity';
 
@@ -379,7 +379,7 @@ export class IntegrationAnalyticsService {
     cutoffDate.setDate(cutoffDate.getDate() - daysToKeep);
 
     const result = await this.metricsRepository.delete({
-      timestamp: { $lt: cutoffDate } as any,
+      timestamp: LessThan(cutoffDate),
     });
 
     this.logger.log(`Cleaned up ${result.affected} old metrics records`);

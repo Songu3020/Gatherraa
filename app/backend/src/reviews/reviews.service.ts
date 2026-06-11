@@ -99,13 +99,13 @@ export class ReviewsService {
           manager.create(ReviewAttachment, {
             reviewId: savedReview.id,
             // DTO uses string literals; cast to enum type
-            type: att.type as any,
+            type: att.type,
             url: att.url,
             thumbnailUrl: att.thumbnailUrl || null,
             filename: att.filename,
             mimeType: att.mimeType,
             size: att.size,
-          } as any),
+          }),
         );
         await manager.save(ReviewAttachment, attachments);
       }

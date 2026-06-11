@@ -12,7 +12,7 @@ global.WebSocket = jest.fn(() => ({
   close: jest.fn(),
   addEventListener: jest.fn(),
   removeEventListener: jest.fn(),
-})) as any;
+})) as unknown as WebSocket;
 
 describe('TransactionStatusTracker', () => {
   beforeEach(() => {

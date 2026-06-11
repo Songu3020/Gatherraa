@@ -340,7 +340,7 @@ export class ApiUsageAnalyticsService {
 
     // Cost by tier
     const costByTier = usageData.reduce((acc, u) => {
-      const tier = (u as any).apiKey?.tier || 'UNKNOWN';
+      const tier = u.apiKey?.tier || 'UNKNOWN';
       acc[tier] = (acc[tier] || 0) + (u.cost || 0);
       return acc;
     }, {} as Record<string, number>);

@@ -393,7 +393,7 @@ export class ComplianceService {
     const targetFrameworks = frameworks || Object.values(ComplianceFramework);
     
     // Get latest reports for each framework
-    const latestReports: Record<ComplianceFramework, ComplianceReport> = {} as any;
+    const latestReports = {} as Record<ComplianceFramework, ComplianceReport>;
     
     for (const framework of targetFrameworks) {
       const latestReport = await this.reportRepository.findOne({
@@ -406,7 +406,7 @@ export class ComplianceService {
     }
 
     // Calculate scores
-    const frameworkScores: Record<ComplianceFramework, number> = {} as any;
+    const frameworkScores = {} as Record<ComplianceFramework, number>;
     let totalScore = 0;
     let frameworkCount = 0;
 

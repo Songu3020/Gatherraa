@@ -590,7 +590,7 @@ export class DocumentParserService {
     };
 
     // Calculate scores for each category
-    const scores: Record<DocumentCategory, number> = {} as any;
+    const scores = {} as Record<DocumentCategory, number>;
     
     for (const [category, keywords] of Object.entries(categoryKeywords)) {
       let score = 0;
