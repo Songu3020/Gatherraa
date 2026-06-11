@@ -32,14 +32,15 @@ export class AuditLog {
   entityId: string;
 
   @Column({ type: 'simple-json', nullable: true })
-  oldValue: any;
+  oldValue: unknown;
 
   @Column({ type: 'simple-json', nullable: true })
-  newValue: any;
+  newValue: unknown;
 
-  private sanitizeData(data: any): any {
+  private sanitizeData(data: unknown): Record<string, unknown> | null {
     if (!data) return null;
-    const sanitized = { ...data };
+    if (typeof data !== 'object') return null;
+    const sanitized = { ...data as Record<string, unknown> };
     
     // List of sensitive keys to redact from logs
     for (const key of Object.keys(sanitized)) {
@@ -59,7 +60,7 @@ export class AuditLog {
     requestUrl?: string;
     status?: number;
     sessionId?: string;
-    [key: string]: any;
+    [key: string]: unknown;
   };
 
   @Column({ type: 'varchar', length: 64, nullable: true })

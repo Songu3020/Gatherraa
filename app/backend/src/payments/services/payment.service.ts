@@ -10,6 +10,10 @@ import { SavedPaymentMethod } from '../entities/saved-payment-method.entity';
 import { CreatePaymentDto, VerifyCryptoPaymentDto, CreateRefundDto } from '../dto/payment.dto';
 import { v4 as uuidv4 } from 'uuid';
 
+export interface PaymentMethodData {
+  stripePaymentMethodId: string;
+}
+
 @Injectable()
 export class PaymentService {
   constructor(
@@ -208,7 +212,7 @@ export class PaymentService {
    */
   async savePaymentMethod(
     userId: string,
-    paymentMethodData: any,
+    paymentMethodData: PaymentMethodData,
     nickname: string,
     setAsDefault?: boolean,
   ): Promise<SavedPaymentMethod> {

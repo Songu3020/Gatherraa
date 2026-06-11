@@ -1,5 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { AuditService } from './audit.service';
+import type { AuditLog } from '../entities/audit-log.entity';
 import * as fs from 'fs';
 import * as path from 'path';
 
@@ -45,19 +46,19 @@ export class ComplianceService {
     return filePath;
   }
 
-  private detectAnomalies(logs: any[]) {
+  private detectAnomalies(logs: AuditLog[]) {
     // Simple anomaly detection (e.g., high volume of deletes, out-of-hours access)
     return logs.filter(log => log.action === 'DELETE').length > 100 ? 'High volume of deletions detected' : 'Normal';
   }
 
-  private summarizeActions(logs: any[]) {
+  private summarizeActions(logs: AuditLog[]) {
     return logs.reduce((acc, log) => {
       acc[log.action] = (acc[log.action] || 0) + 1;
       return acc;
     }, {});
   }
 
-  private async verifyLogs(logs: any[]) {
+  private async verifyLogs(logs: AuditLog[]) {
     const results = await Promise.all(logs.slice(0, 100).map(log => this.auditService.verifyLogIntegrity(log.id)));
     const validCount = results.filter(Boolean).length;
     return `Verified ${validCount}/${results.length} samples. Integrity confirmed.`;

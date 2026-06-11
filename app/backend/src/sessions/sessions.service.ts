@@ -2,6 +2,16 @@ import { Injectable, OnModuleInit, OnModuleDestroy, Logger } from '@nestjs/commo
 import { ConfigService } from '@nestjs/config';
 import { createClient, RedisClientType } from 'redis';
 
+export interface SessionData {
+  userId: string;
+  accessToken?: string;
+  refreshToken?: string;
+  walletAddress?: string;
+  createdAt?: string;
+  updatedAt?: string;
+  [key: string]: unknown;
+}
+
 @Injectable()
 export class SessionsService implements OnModuleInit, OnModuleDestroy {
   private redisClient: RedisClientType;
@@ -35,9 +45,9 @@ export class SessionsService implements OnModuleInit, OnModuleDestroy {
     await this.redisClient.quit();
   }
 
-  async createSession(sessionId: string, userId: string, data: any = {}, ttl: number = 86400): Promise<boolean> {
+  async createSession(sessionId: string, userId: string, data: Partial<SessionData> = {}, ttl: number = 86400): Promise<boolean> {
     try {
-      const sessionData = {
+      const sessionData: SessionData = {
         userId,
         ...data,
         createdAt: new Date().toISOString(),
@@ -59,7 +69,7 @@ export class SessionsService implements OnModuleInit, OnModuleDestroy {
     }
   }
 
-  async getSession(sessionId: string): Promise<any> {
+  async getSession(sessionId: string): Promise<SessionData | null> {
     try {
       const sessionData = await this.redisClient.get(`session:${sessionId}`);
       if (!sessionData) return null;
@@ -71,7 +81,7 @@ export class SessionsService implements OnModuleInit, OnModuleDestroy {
     }
   }
 
-  async updateSession(sessionId: string, data: any): Promise<boolean> {
+  async updateSession(sessionId: string, data: Partial<SessionData>): Promise<boolean> {
     try {
       const session = await this.getSession(sessionId);
       if (!session) return false;

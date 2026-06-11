@@ -9,6 +9,16 @@ import { AuditAction } from '../constants/audit.constants';
 import * as crypto from 'node:crypto';
 import { ConfigService } from '@nestjs/config';
 
+export interface AuditEventData {
+  userId?: string;
+  action: AuditAction | string;
+  entityName?: string;
+  entityId?: string;
+  oldValue?: unknown;
+  newValue?: unknown;
+  metadata?: Record<string, unknown>;
+}
+
 @Injectable()
 export class AuditService {
   private readonly logger = new Logger(AuditService.name);
@@ -27,15 +37,7 @@ export class AuditService {
     this.encryptionKey = Buffer.from(rawKey);
   }
 
-  async logEvent(data: {
-    userId?: string;
-    action: AuditAction | string;
-    entityName?: string;
-    entityId?: string;
-    oldValue?: any;
-    newValue?: any;
-    metadata?: any;
-  }): Promise<AuditLog> {
+  async logEvent(data: AuditEventData): Promise<AuditLog> {
     const auditLog = new AuditLog();
     auditLog.userId = data.userId || 'anonymous';
     auditLog.action = data.action;
