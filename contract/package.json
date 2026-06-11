@@ -4,7 +4,7 @@
   "description": "Smart-contract for Gathera — open-source infrastructure for Web3 events and conferences.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "echo \"No npm test defined for contract package. Use cargo test or npx hardhat for deployment checks.\"",
     "deploy-cross-chain": "npx hardhat run scripts/deploy-cross-chain.ts",
     "test-cross-chain": "npx hardhat run scripts/test-cross-chain.ts",
     "deploy:local": "npx hardhat run scripts/deploy-cross-chain.ts --network hardhatMainnet",

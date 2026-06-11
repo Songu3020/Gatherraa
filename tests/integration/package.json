@@ -5,6 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "node test/run-tests.js",
+    "lint": "npm run test:lint",
+    "format": "prettier --write \"**/*.{js,json,md}\"",
     "test:cross-contract": "echo 'Cross-contract tests not implemented for Soroban contracts yet'",
     "test:token-interactions": "echo 'Token interaction tests not implemented for Soroban contracts yet'",
     "test:end-to-end": "echo 'End-to-end tests not implemented for Soroban contracts yet'",

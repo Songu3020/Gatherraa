@@ -1,15 +1,42 @@
 {
-  "dependencies": {
-    "@hookform/resolvers": "^5.2.2",
-    "@nestjs/cli": "^11.0.16",
-    "@nestjs/mapped-types": "*",
-    "ioredis": "^5.9.3",
-    "react-hook-form": "^7.71.2",
-    "zod": "^4.3.6"
+  "name": "gatheraa",
+  "version": "0.0.1",
+  "private": true,
+  "license": "MIT",
+  "workspaces": [
+    "app/backend",
+    "app/frontend",
+    "app/image-service",
+    "contract",
+    "tests/integration"
+  ],
+  "packageManager": "npm@10",
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "scripts": {
+    "install": "npm ci --workspaces",
+    "clean": "rimraf node_modules app/backend/node_modules app/frontend/node_modules app/image-service/node_modules tests/integration/node_modules contract/target",
+    "build": "npm run build --workspaces && npm run build:contracts",
+    "build:backend": "npm --workspace app/backend run build",
+    "build:frontend": "npm --workspace app/frontend run build",
+    "build:contracts": "cd contract && cargo build --workspace --all-features",
+    "format": "npm run format --workspaces",
+    "format:backend": "npm --workspace app/backend run format",
+    "format:frontend": "npm --workspace app/frontend run format",
+    "lint": "npm run lint --workspaces",
+    "lint:backend": "npm --workspace app/backend run lint",
+    "lint:frontend": "npm --workspace app/frontend run lint",
+    "test": "npm run test:backend && npm run test:integration && npm run test:contract",
+    "test:backend": "npm --workspace app/backend test",
+    "test:frontend": "npm --workspace app/frontend run lint",
+    "test:contract": "cd contract && cargo test --workspace --all-features",
+    "test:integration": "npm --workspace tests/integration test",
+    "storybook": "npm --workspace app/frontend run storybook",
+    "validate": "npm run lint && npm run test",
+    "workspace:status": "npm workspaces list --json"
   },
   "devDependencies": {
-    "@types/react": "^19.2.14",
-    "@lhci/cli": "^0.15.1",
-    "@types/ioredis": "^4.28.10"
+    "rimraf": "^6.1.2"
   }
 }

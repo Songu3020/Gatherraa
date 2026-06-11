@@ -97,15 +97,13 @@ jobs:
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'npm'
-          cache-dependency-path: app/backend/package-lock.json
+          cache-dependency-path: package-lock.json
 
       - name: Install dependencies
-        working-directory: app/backend
-        run: npm ci
+        run: npm ci --workspaces
 
-      - name: Run tests
-        working-directory: app/backend
-        run: npm test
+      - name: Run backend tests
+        run: npm run test:backend
 
   # --- Frontend Jobs ---
   frontend-lint:
@@ -119,15 +117,13 @@ jobs:
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'npm'
-          cache-dependency-path: app/frontend/package-lock.json
+          cache-dependency-path: package-lock.json
 
       - name: Install dependencies
-        working-directory: app/frontend
-        run: npm ci
+        run: npm ci --workspaces
 
       - name: Run ESLint
-        working-directory: app/frontend
-        run: npm run lint
+        run: npm run lint:frontend
 
   frontend-typecheck:
     name: Frontend TypeCheck
@@ -140,14 +136,12 @@ jobs:
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'npm'
-          cache-dependency-path: app/frontend/package-lock.json
+          cache-dependency-path: package-lock.json
 
       - name: Install dependencies
-        working-directory: app/frontend
-        run: npm ci
+        run: npm ci --workspaces
 
       - name: Run TypeScript typecheck
-        working-directory: app/frontend
         run: npx tsc --noEmit
 
   # --- Security & Dependency Scanning (#349) ---

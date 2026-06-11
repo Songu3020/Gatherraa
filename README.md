@@ -58,10 +58,10 @@ Gathera/
 
 ### Prerequisites
 
-- Node.js 20+
+- Node.js 20.0.0+
+- npm 10+
 - Rust 1.74+
 - Soroban CLI
-- npm or yarn
 
 ### Environment Setup
 
@@ -90,18 +90,31 @@ Edit each `.env` file and fill in the required values. See the comments in each 
 git clone https://github.com/Gatheraa/Gathera.git
 cd Gathera
 
-# Install contract dependencies
-cd contract
+# Install all workspace dependencies from the repository root
 npm install
 
-# Install backend dependencies
-cd ../app/backend
-npm install
-
-# Install frontend dependencies
-cd ../frontend
-npm install
+# Optional: install dependencies per package
+cd contract && npm install
+cd ../app/backend && npm install
+cd ../frontend && npm install
 ```
+
+### Workspace commands
+
+- `npm run install` - install all workspace dependencies from the root lockfile
+- `npm run build` - build all workspace packages and compile contracts
+- `npm run lint` - lint all workspace packages
+- `npm run format` - format all workspace packages with available workspace format scripts
+- `npm run test` - run backend, integration, and contract tests
+- `npm run clean` - remove workspace install artifacts
+- `npm run workspace:status` - list workspace packages
+
+Package-specific workspace commands:
+- `npm run format:backend` / `npm run format:frontend` - run formatting in named workspace packages
+- `npm run test:integration` - run integration tests defined in `tests/integration`
+
+> This repository includes root-level formatting and linting configuration: `.editorconfig`, `.prettierrc`, `.eslintrc.json`, `.eslintignore`, and `.prettierignore`.
+> Run `npm run install` from the repository root and avoid running package installs from individual subfolders unless you need package-specific dependency changes.
 
 ### Running the Development Environment
 
