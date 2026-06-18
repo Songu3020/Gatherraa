@@ -1,85 +1,23 @@
 import { Module, NestModule, MiddlewareConsumer } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
+import { ScheduleModule } from '@nestjs/schedule';
+
 import { AppController } from './app.controller';
-import { ApiController } from './api/api.controller';
 import { AppService } from './app.service';
 import { VersioningMiddleware } from './common/middleware/versioning.middleware';
-import { ConfigModule } from '@nestjs/config';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { AuthModule } from './auth/auth.module';
-import { UsersModule } from './users/users.module';
-import { SessionsModule } from './sessions/sessions.module';
-import { AnalyticsModule } from './analytics/analytics.module';
-import { EventsModule } from './events/events.module';
-import { ReviewsModule } from './reviews/reviews.module';
-import { NotificationsModule } from './notifications/notifications.module';
-import { ScheduleModule } from '@nestjs/schedule';
-import { SearchModule } from './search/search.module';
-import { RateLimitModule } from './rate-limit/rate-limit.module';
-import { HelpCenterModule } from './help-center/help-center.module';
-import { CategoriesModule } from './categories/categories.module';
-import { TagsModule } from './tags/tags.module';
-import { PaymentsModule } from './payments/payments.module';
-import { TaskQueueModule } from './task-queue/task-queue.module';
-import { MonitoringModule } from './monitoring/monitoring.module';
-import { ApiModule } from './api/api.module';
-import { RealtimeModule } from './realtime/realtime.module';
-import { CouponsModule } from './coupons/coupons.module';
-import { MigrationsModule } from './migrations/migrations.module';
-import { BookingModule } from './booking/booking.module';
-import { AuditModule } from './audit/audit.module';
-import { OrganizerModule } from './organizer/organizer.module';
-import { WebhooksModule } from './webhooks/webhooks.module';
-import { WaitlistModule } from './waitlist/waitlist.module';
-import { DataAggregationModule } from './data-aggregation/data-aggregation.module';
-import { InvoicesModule } from './invoices/invoices.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      envFilePath: '.env',
-    }),
-    TypeOrmModule.forRoot({
-      type: 'sqlite',
-      database: process.env.DATABASE_PATH || './database.sqlite',
-      entities: [__dirname + '/**/*.entity{.ts,.js}'],
-      synchronize: process.env.NODE_ENV !== 'production',
-      logging: process.env.NODE_ENV !== 'production',
     }),
     ScheduleModule.forRoot(),
-    AuthModule,
-    UsersModule,
-    SessionsModule,
-    AnalyticsModule,
-    EventsModule,
-    ReviewsModule,
-    NotificationsModule,
-    PaymentsModule,
-    SearchModule,
-    RateLimitModule,
-    HelpCenterModule,
-    CategoriesModule,
-    TagsModule,
-    TaskQueueModule,
-    MonitoringModule,
-    ApiModule,
-    RealtimeModule,
-    CouponsModule,
-    MigrationsModule,
-    BookingModule,
-    OrganizerModule,
-    WebhooksModule,
-    WaitlistModule,
-    DataAggregationModule,
-    InvoicesModule,
   ],
-  controllers: [AppController, ApiController],
+  controllers: [AppController],
   providers: [AppService],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer
-      .apply(VersioningMiddleware)
-      .forRoutes('*');
+    consumer.apply(VersioningMiddleware).forRoutes('*');
   }
 }

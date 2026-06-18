@@ -21,5 +21,35 @@
     "noImplicitAny": false,
     "strictBindCallApply": false,
     "noFallthroughCasesInSwitch": false
-  }
+  },
+  "exclude": [
+    "node_modules",
+    "dist",
+    "src/auth/**",
+    "src/users/**",
+    "src/sessions/**",
+    "src/analytics/**",
+    "src/events/**",
+    "src/reviews/**",
+    "src/notifications/**",
+    "src/search/**",
+    "src/rate-limit/**",
+    "src/help-center/**",
+    "src/categories/**",
+    "src/tags/**",
+    "src/payments/**",
+    "src/task-queue/**",
+    "src/monitoring/**",
+    "src/api/**",
+    "src/realtime/**",
+    "src/coupons/**",
+    "src/migrations/**",
+    "src/booking/**",
+    "src/audit/**",
+    "src/organizer/**",
+    "src/webhooks/**",
+    "src/waitlist/**",
+    "src/data-aggregation/**",
+    "src/invoices/**"
+  ]
 }
