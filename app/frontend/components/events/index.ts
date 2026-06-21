@@ -9,3 +9,5 @@ export { VirtualizedEventList } from './VirtualizedEventList';
 export type { VirtualizedEventListProps } from './VirtualizedEventList';
 export { ScheduleBuilder } from './ScheduleBuilder';
 export type { ScheduleBuilderProps } from './ScheduleBuilder';
+export { default as SeatSelection } from './SeatSelection';
+export type { SeatSelectionProps, SeatSelectionSeat, SeatStatus } from './SeatSelection';

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useMemo, useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
 import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
@@ -10,6 +10,7 @@ import { EventAccessGate } from '@/components/ui/molecules';
 import RatingDisplay from '../../../components/reviews/rating-display';
 import ReviewList from '../../../components/reviews/review-list';
 import ReviewForm from '../../../components/reviews/review-form';
+import SeatSelection, { type SeatSelectionSeat } from '@/components/events/SeatSelection';
 import { useAuth } from '../../../hooks/useAuth';
 
 /** API may include aggregates not yet on the base `Event` type */
@@ -26,6 +27,7 @@ export default function EventDetailPage() {
   const eventId = typeof params?.id === 'string' ? params.id : '';
 
   const [event, setEvent] = useState<EventDetailPayload | null>(null);
+  const [selectedSeatIds, setSelectedSeatIds] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [showReviewForm, setShowReviewForm] = useState(false);
@@ -73,9 +75,7 @@ export default function EventDetailPage() {
     return (
       <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
         <div className="text-center">
-          <div className="text-red-600 dark:text-red-400 mb-4">
-            {error || 'Event not found'}
-          </div>
+          <div className="text-red-600 dark:text-red-400 mb-4">{error || 'Event not found'}</div>
           <button
             onClick={() => window.location.reload()}
             className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
@@ -101,7 +101,53 @@ export default function EventDetailPage() {
   const normalizedAddress = address?.toLowerCase();
   const normalizedOrganizer = event.organizerId?.toLowerCase();
 
-  const isOrganizer = Boolean(normalizedAddress && normalizedOrganizer && normalizedAddress === normalizedOrganizer);
+  const seatMap = useMemo(() => {
+    if (!event) {
+      return [];
+    }
+
+    const rows = ['A', 'B', 'C', 'D', 'E', 'F', 'G'];
+    const seatsPerRow = 8;
+    const totalSeats = Math.min(Math.max(event.capacity || 24, 20), rows.length * seatsPerRow);
+    const statusCycle: SeatSelectionSeat['status'][] = [
+      'available',
+      'reserved',
+      'booked',
+      'unavailable',
+    ];
+
+    const seats: SeatSelectionSeat[] = [];
+    let index = 0;
+
+    for (let rowIndex = 0; rowIndex < rows.length && seats.length < totalSeats; rowIndex += 1) {
+      const row = rows[rowIndex];
+      const section =
+        row === 'A' || row === 'B' ? 'Front' : row === 'C' || row === 'D' ? 'Center' : 'Rear';
+
+      for (let number = 1; number <= seatsPerRow && seats.length < totalSeats; number += 1) {
+        const status = statusCycle[index % statusCycle.length];
+        const price =
+          row === 'A' ? 180 : row === 'B' ? 150 : row === 'C' ? 125 : row === 'D' ? 105 : 85;
+
+        seats.push({
+          id: `${row}-${number}`,
+          row,
+          number,
+          label: `${row}${number}`,
+          status,
+          section,
+          price,
+        });
+        index += 1;
+      }
+    }
+
+    return seats;
+  }, [event]);
+
+  const isOrganizer = Boolean(
+    normalizedAddress && normalizedOrganizer && normalizedAddress === normalizedOrganizer,
+  );
   const isRegistered = Boolean((event as Event & { isRegistered?: boolean }).isRegistered);
 
   const viewerStatus = {
@@ -160,6 +206,15 @@ export default function EventDetailPage() {
               </div>
             )}
           </div>
+        </div>
+
+        <div className="mb-6">
+          <SeatSelection
+            seats={seatMap}
+            initialSelectedSeatIds={selectedSeatIds}
+            onSelectionChange={setSelectedSeatIds}
+            maxSelectable={3}
+          />
         </div>
 
         {/* Rating Display */}
